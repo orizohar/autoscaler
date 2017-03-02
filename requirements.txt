@@ -1,0 +1,3 @@
+azure-common==1.1.4
+azure-mgmt-compute==0.33.1rc1
+azure-mgmt-servicebus==0.1.0
