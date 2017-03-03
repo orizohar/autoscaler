@@ -22,11 +22,10 @@ sub2 = sbmgmt.subscriptions.get(config.SB_RESOURCE_GROUP,
     config.SB_NAMESPACE , 
     config.SB_TOPIC_2, 
     config.SB_SUBSCRIPTION_2)
-#print(res.message_count)
 total_message_count = sub1.message_count + sub2.message_count
 
-scale_by = 0
 # Check if scaling is needed
+scale_by = 0
 if total_message_count < config.VMSS_LOW_THRESHOLD:
     scale_by = -config.VMSS_SCALE_DOWN_BY
 elif total_message_count > config.VMSS_HIGH_THRESHOLD:
