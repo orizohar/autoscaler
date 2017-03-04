@@ -23,5 +23,5 @@ SB_TOPIC_2=os.getenv('TOPIC2', default='t2')
 SB_SUBSCRIPTION_1=os.getenv('SUB1', default='s10')
 SB_SUBSCRIPTION_2=os.getenv('SUB2', default='s20')
 
-RUN_ONCE=os.getenv('RUN_ONCE', default=True)
-INTERVAL_IN_SEC=os.getenv('INTERVAL_IN_SEC', default=300)
+RUN_ONCE=bool(os.getenv('RUN_ONCE'))
+INTERVAL_IN_SEC=float(os.getenv('INTERVAL_IN_SEC', default=300))

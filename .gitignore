@@ -2,3 +2,4 @@
 *.pyc
 .vscode
 setenv.bat
+env.list
