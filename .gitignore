@@ -1,0 +1,4 @@
+.gitignore
+*.pyc
+.vscode
+setenv.bat
