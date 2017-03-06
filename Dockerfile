@@ -11,5 +11,6 @@ ADD requirements.txt /
 RUN pip install --no-cache-dir -r requirements.txt
 
 ADD *.py /
+ADD config.json /
 
 CMD ["python", "-u", "main.py"]

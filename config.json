@@ -1,0 +1,31 @@
+{
+    "polling_interval_seconds" : 300,
+    "run_once" : false,
+    "autoscaling_parameters" :
+    {
+        "min_capacity" : 2,
+        "max_capacity" : 5,
+        "low_message_threshold" : 3,
+        "high_message_threshold" : 10,
+        "scale_up_factor" : 1,
+        "scale_down_factor" : 1
+    },
+    "vmss" : {
+        "resource_group" : "vmss-rg",
+        "name" : "myvmss"
+    },
+    "subscriptions" : [
+        {
+            "resource_group" : "sb-rg",
+            "namespace" : "mysb001",
+            "topic" : "topic1",
+            "subscription" : "sub10"
+        },
+        {
+            "resource_group" : "sb-rg",
+            "namespace" : "mysb001",
+            "topic" : "topic2",
+            "subscription" : "sub20"
+        }
+    ]
+}
