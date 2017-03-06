@@ -1,22 +1,27 @@
 # Custom Azure VM Scale Set Autoscaling #
 
-This repo includes python code for a custom autoscaling service for Azure VM scale sets. The code can be run as a time triggered Azure Function or can be run as a service running in a Docker container (hosted on a Linux App Service instance for example). The service autoscales the VMSS according to the sum of messages in two Azure ServiceBus subscriptions.
+Azure VM scale sets can be configured to autoscale by a variety of metrics but in some scenarios a custom metric is needed. For example, an Azure VMSS might be running a set of workers consuming jobs from several ServiceBus subscriptions and should scale according to the total number of messages in all subscriptions. This repo includes python reference code for a custom autoscaling service for Azure VM scale sets. The code can be run as a time triggered Azure Function or can be run as a service running in a Docker container. 
+
+Although this code implements custom scaling according to a specific scenario (total number of messages in a number of subscriptions), it can be used as a reference for other similar scenarios.
 
 ## Configuration ##
 
-All of the scaler configurations can be found in `config.py`. You can change these to hardcoded ones for you environment or define them using environment variables. Please note that for the code to work you will need to define these values:
+All of the scaler configurations can be found in `config.json`. Values should be changed to fit the VMSS to be scaled and ServiceBus
+to be polled.
 
-1. Your Azure subscription ID and tenant ID.
-2. Create a service principal (see [this article](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal)) and add its credentials `AZURE_CLIENT_ID` and `AZURE_CLIENT_SECRET`. Note you will need to give the app you create a contributor role to be able to scale the VMSS.
-3. Your vm scale set resource group and name
-4. Your ServiceBus namespace with two subscriptions which belong to two topics.
+Also, the service uses an Azure service prinicipal that should be created and given a Contributor role to be able to scale the VMSS (see [this article](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal)).
+The service uses the following environment variables for Azure authentication:
 
-Optionally you can change the scaling parameters (min/max capacity, scaling factor, scale action thresholds) in `config.py`
+- AZURE_CLIENT_ID 
+- AZURE_CLIENT_SECRET
+- AZURE_TENANT_ID
+- SUBSCRIPTION_ID
 
-Note that if the environment variable `RUN_ONCE` is defined the autoscaling logic will run once (e.g. for running via Azure Functions).
+The values for the above variables are provided by the service principal.
 
-## Running via a Docker container ##
-You can build a docker image of this application using the included `Dockerfile`. Be sure to change `config.py` with your own configuration or run the container with an environment variables file.
+## Running in a Docker container ##
+
+A Docker image of this application can be created using the included `Dockerfile`. To define the credentials inside the container an environment variables file can be used when running the container.
 
 Example docker run command:
 
@@ -31,20 +36,10 @@ AZURE_CLIENT_ID=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
 AZURE_CLIENT_SECRET=1111111111111111111111111111111111111111111=
 AZURE_TENANT_ID=YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY
 SUBSCRIPTION_ID=ZZZZZZZZ-ZZZZ-ZZZZ-ZZZZ-ZZZZZZZZZZZZ
-VMSS_RESOURCE_GROUP=vmss-rg
-VMSS_NAME=myvmss
-SB_RESOURCE_GROUP=sb-rg
-SB_NAMESPACE=myservicebus
-SB_KEYNAME=mysbkey
-SB_KEYVAL=2222222222222222222222222222222222222222222=
-SB_TOPIC_1=topic1
-SB_TOPIC_2=topic2
-SB_SUBSCRIPTION_1=sub1
-SB_SUBSCRIPTION_2=sub2
 ```
 
 ## Message client ##
-The repo also includes an example message client which can help you with sending and receiving messages to/from ServiceBus for testing. Run the following for more options 
+The repo also includes an example message client which can be used for sending and receiving messages to/from ServiceBus for testing. See usage information by running: 
 
 ```
 python msg_client.py --help

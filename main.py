@@ -13,7 +13,9 @@ SCALER_CONFIG_FILEPATH=os.getenv('SCALER_CONFIG_FILEPATH', 'config.json')
 def main():
     parser = argparse.ArgumentParser(description='Autoscaling service polling multiple ServiceBus subscriptions')
     parser.add_argument('-f','--file', help='JSON config file path', default='config.json')
-    parser.add_argument('-r','--run_once', help='Optional flag to indicate polling and scaling should run once. Overrides config file option.', action='store_true')
+    parser.add_argument('-r','--run_once', help='Optional flag to indicate polling and scaling should run once. Overrides config file.', action='store_true')
+    parser.add_argument('-i','--interval', help='Integer number of seconds between subscriptions polling. Overrides config file', type=int)
+    
     args = parser.parse_args()
     if not os.path.isfile(args.file):
         print("ERROR: Can't find {0} - Exiting.".format(args.file))
@@ -46,18 +48,19 @@ def verify_credential_data():
         print('Exiting')
         exit(1)
 
-def env_override(config):
+def env_override(config_data):
     '''
     Override configuration with environment variables if they exist.
     '''
-    pass
 
-def args_override(config, args):
+def args_override(config_data, args):
     '''
     Override configuration with arguments if they exist.
     '''
     if args.run_once:
         config_data['run_once'] = True
+    if args.interval:
+        config_data['polling_interval_seconds'] = args.interval
 
 if __name__ == "__main__":
     main()
