@@ -52,10 +52,19 @@ def env_override(config_data):
     '''
     Override configuration with environment variables if they exist.
     '''
+    config_data['run_once'] = bool(os.getenv('RUN_ONCE', config_data['run_once']))
+    config_data['polling_interval_seconds'] = float(os.getenv('INTERVAL_IN_SEC', config_data['polling_interval_seconds']))
+    scaling_params = config_data['autoscaling_parameters']
+    scaling_params['min_capacity'] = os.getenv('SCALING_MIN_CAPACITY', scaling_params['min_capacity'])
+    scaling_params['max_capacity'] = os.getenv('SCALING_MAX_CAPACITY', scaling_params['max_capacity'])
+    scaling_params['low_message_threshold'] = os.getenv('SCALING_LOW_THRESHOLD', scaling_params['low_message_threshold'])
+    scaling_params['high_message_threshold'] = os.getenv('SCALING_HIGH_THRESHOLD', scaling_params['high_message_threshold'])
+    scaling_params['scale_up_factor'] = os.getenv('SCALING_UP_FACTOR', scaling_params['scale_up_factor'])
+    scaling_params['scale_down_factor'] = os.getenv('SCALING_DOWN_FACTOR', scaling_params['scale_down_factor'])
 
 def args_override(config_data, args):
     '''
-    Override configuration with arguments if they exist.
+    Override configuration with command line arguments if they exist.
     '''
     if args.run_once:
         config_data['run_once'] = True
