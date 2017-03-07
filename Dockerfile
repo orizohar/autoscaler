@@ -10,7 +10,7 @@ RUN apk add --update \
 ADD requirements.txt /
 RUN pip install --no-cache-dir -r requirements.txt
 
-ADD *.py /
-ADD config.json /
+ADD ./src/*.py /
+ADD ./src/config.json /
 
-CMD ["python", "-u", "main.py"]
+CMD ["python", "-u", "run.py", "--loop"]

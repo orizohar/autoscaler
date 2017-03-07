@@ -1,3 +1,6 @@
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'env/Lib/site-packages')))
 from azure.mgmt.servicebus import ServiceBusManagementClient
 from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.compute import ComputeManagementClient
