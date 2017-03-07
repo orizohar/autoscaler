@@ -12,12 +12,23 @@ to be polled.
 Also, the service uses an Azure service prinicipal that should be created and given a Contributor role to be able to scale the VMSS (see [this article](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal)).
 The service uses the following environment variables for Azure authentication:
 
-- AZURE_CLIENT_ID 
-- AZURE_CLIENT_SECRET
-- AZURE_TENANT_ID
-- SUBSCRIPTION_ID
+- *AZURE_CLIENT_ID* 
+- *AZURE_CLIENT_SECRET*
+- *AZURE_TENANT_ID*
+- *SUBSCRIPTION_ID*
 
 The values for the above variables are provided by the service principal.
+
+Additional environment variables can be defined to override `config.json` values:
+
+- *RUN_ONCE*
+- *INTERVAL_IN_SEC*
+- *SCALING_MIN_CAPACITY*
+- *SCALING_MAX_CAPACITY*
+- *SCALING_LOW_THRESHOLD*
+- *SCALING_HIGH_THRESHOLD*
+- *SCALING_UP_FACTOR*
+- *SCALING_DOWN_FACTOR*
 
 ## Running in a Docker container ##
 
@@ -36,6 +47,8 @@ AZURE_CLIENT_ID=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
 AZURE_CLIENT_SECRET=1111111111111111111111111111111111111111111=
 AZURE_TENANT_ID=YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY
 SUBSCRIPTION_ID=ZZZZZZZZ-ZZZZ-ZZZZ-ZZZZ-ZZZZZZZZZZZZ
+SCALING_MIN_CAPACITY=4
+SCALING_MAX_CAPACITY=20
 ```
 
 ## Message client ##
