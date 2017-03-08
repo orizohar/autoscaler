@@ -10,7 +10,7 @@ RUN apk add --update \
 ADD requirements.txt /
 RUN pip install --no-cache-dir -r requirements.txt
 
-ADD ./src/*.py /
-ADD ./src/config.json /
+ADD ./scalerService/*.py /
+ADD ./scalerService/config.json /
 
 CMD ["python", "-u", "run.py", "--loop"]

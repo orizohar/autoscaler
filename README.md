@@ -21,7 +21,7 @@ The values for the above variables are provided by the service principal.
 
 Additional environment variables can be defined to override `config.json` values:
 
-- *RUN_ONCE*
+- *LOOP*
 - *INTERVAL_IN_SEC*
 - *SCALING_MIN_CAPACITY*
 - *SCALING_MAX_CAPACITY*
