@@ -13,7 +13,7 @@ SCALER_CONFIG_FILEPATH=os.getenv('SCALER_CONFIG_FILEPATH', 'config.json')
 def main():
     parser = argparse.ArgumentParser(description='Autoscaling service polling multiple ServiceBus subscriptions')
     parser.add_argument('-f','--file', help='JSON config file path', default='config.json')
-    parser.add_argument('-r','--run_once', help='Optional flag to indicate polling and scaling should run once. Overrides config file.', action='store_true')
+    parser.add_argument('-l','--loop', help='Optional flag to indicate polling and scaling should run continuously. Overrides config file.', action='store_true')
     parser.add_argument('-i','--interval', help='Integer number of seconds between subscriptions polling. Overrides config file', type=int)
     
     args = parser.parse_args()
@@ -33,7 +33,7 @@ def main():
         SUBSCRIPTION_ID,
         config_data)    
     scaler.run()
-    if config_data['run_once'] :
+    if not config_data['loop'] :
         return
     while True:
         time.sleep(config_data['polling_interval_seconds'])
@@ -52,7 +52,7 @@ def env_override(config_data):
     '''
     Override configuration with environment variables if they exist.
     '''
-    config_data['run_once'] = bool(os.getenv('RUN_ONCE', config_data['run_once']))
+    config_data['loop'] = bool(os.getenv('LOOP', config_data['loop']))
     config_data['polling_interval_seconds'] = float(os.getenv('INTERVAL_IN_SEC', config_data['polling_interval_seconds']))
     scaling_params = config_data['autoscaling_parameters']
     scaling_params['min_capacity'] = os.getenv('SCALING_MIN_CAPACITY', scaling_params['min_capacity'])
@@ -66,8 +66,8 @@ def args_override(config_data, args):
     '''
     Override configuration with command line arguments if they exist.
     '''
-    if args.run_once:
-        config_data['run_once'] = True
+    if args.loop:
+        config_data['loop'] = True
     if args.interval:
         config_data['polling_interval_seconds'] = args.interval
 

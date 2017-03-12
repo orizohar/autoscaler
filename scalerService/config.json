@@ -1,6 +1,6 @@
 {
     "polling_interval_seconds" : 300,
-    "run_once" : false,
+    "loop" : false,
     "autoscaling_parameters" :
     {
         "min_capacity" : 2,

@@ -5,9 +5,9 @@ import os
 class MessageClient():
     def __init__(self, namespace, keyname, keyval):
         self._client = ServiceBusService(
-            service_namespace=os.getenv('SB_NAMESPACE'),
-            shared_access_key_name=os.getenv('SB_KEYNAME'),
-            shared_access_key_value=os.getenv('SB_KEYVAL'))
+            service_namespace=namespace,
+            shared_access_key_name=keyname,
+            shared_access_key_value=keyval)
 
     def send(self, topic, num):
         for i in range(num):
@@ -28,9 +28,18 @@ def main():
     parser.add_argument('--keyname', help='ServiceBus key name', required=False, default=os.getenv('SB_KEYNAME'))
     parser.add_argument('--keyval', help='ServiceBus key value', required=False, default=os.getenv('SB_KEYVAL'))
     parser.add_argument('-t', '--topic', help='Topic to use for sending/receiving', required=True)
-    parser.add_argument('-s', '--subscription', help='Subscription to receive messages from', required=True)
+    parser.add_argument('-s', '--subscription', help='Subscription to receive messages from', required=False)
 
     args = parser.parse_args()
+    if (not args.namespace) or (not args.keyname) or (not args.keyval):
+        print('ERROR: Service Bus namespace, key name or key value missing please define the following environment variables:')
+        print('\tSB_NAMESPACE, SB_KEYNAME, SB_KEYVAL')
+        print('Or alternatively provide the following arguments')
+        print('\t--namespace, --keyname, --keyval')
+        print('Exiting...')
+        exit(1)
+
+
     msg_client = MessageClient(args.namespace, args.keyname, args.keyval)
     if args.mode == 's':
         msg_client.send(args.topic, args.num)
