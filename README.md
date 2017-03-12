@@ -4,6 +4,10 @@ Azure VM scale sets can be configured to autoscale by a variety of metrics but i
 
 Although this code implements custom scaling according to a specific scenario (total number of messages in a number of subscriptions), it can be used as a reference for other similar scenarios.
 
+The scenario addressed in this repo is described by the following diagram:
+
+![Diagram](/resources/autoscaler.png)
+
 ## Configuration ##
 
 All of the scaler configurations can be found in `config.json`. Values should be changed to fit the VMSS to be scaled and ServiceBus
@@ -30,7 +34,7 @@ Additional environment variables can be defined to override `config.json` values
 - *SCALING_UP_FACTOR*
 - *SCALING_DOWN_FACTOR*
 
-## Running in a Docker container ##
+## Deployment using Docker ##
 
 A Docker image of this application can be created using the included `Dockerfile`. To define the credentials inside the container an environment variables file can be used when running the container.
 
@@ -50,6 +54,14 @@ SUBSCRIPTION_ID=ZZZZZZZZ-ZZZZ-ZZZZ-ZZZZ-ZZZZZZZZZZZZ
 SCALING_MIN_CAPACITY=4
 SCALING_MAX_CAPACITY=20
 ```
+
+## Deployment using Azure Functions ##
+
+The autoscaling service can be also be deployed using Azure Functions. This repository is structured in a way which allows continuous deployment with local git or GitHub deployment sources (for more info, please see [this article](https://docs.microsoft.com/en-us/azure/azure-functions/functions-continuous-deployment)). Note that `function.json` defines a function with a time trigger.
+
+As mentioned above, the service expects credential information to be available via environment variables. Environment variables can be configured by going to **Function app settings --> Configure app settings** from the Function blade and configuring the variables like so:
+
+![Function app settings](/resources/func-appsettings.png)
 
 ## Message client ##
 The repo also includes an example message client which can be used for sending and receiving messages to/from ServiceBus for testing. See usage information by running: 
